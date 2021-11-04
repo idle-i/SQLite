@@ -169,9 +169,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun getMessagesWithTimeInterval() {
         val sqlRequest = """
-            SELECT DISTINCT text FROM ${DBHelper.messagesTable}
-            WHERE ${DBHelper.textField} IS NOT NULL AND ${DBHelper.textField} != "NULL"
+            SELECT T1.${DBHelper.textField} FirstText, T2.${DBHelper.textField} SecondText
+            FROM ${DBHelper.messagesTable} T1
+            INNER JOIN ${DBHelper.messagesTable} T2
+            ON T1.${DBHelper.createdAtField} - T2.${DBHelper.createdAtField} > 0
+            AND T1.${DBHelper.createdAtField} - T2.${DBHelper.createdAtField} < 15 * 60
+            AND T1.${DBHelper.chatIdField} = T2.${DBHelper.chatIdField}
+            GROUP BY T1.${DBHelper.idField} HAVING MIN(T2.${DBHelper.createdAtField})
+            ORDER BY T1.${DBHelper.createdAtField}
         """.trimIndent()
+
+        println(sqlRequest)
 
         DataManager.instance.getDB(this)
             .rawQuery(sqlRequest, null)
@@ -179,13 +187,23 @@ class MainActivity : AppCompatActivity() {
                 if (count != 0) {
                     moveToFirst()
                     addLineToTextView(
-                        getString(getColumnIndexOrThrow(DBHelper.textField)),
+                        String.format(
+                            Locale.getDefault(),
+                            "%s - %s",
+                            getString(getColumnIndexOrThrow("FirstText")),
+                            getString(getColumnIndexOrThrow("SecondText"))
+                        ),
                         true
                     )
 
                     while (moveToNext())
                         addLineToTextView(
-                            getString(getColumnIndexOrThrow(DBHelper.textField)),
+                            String.format(
+                                Locale.getDefault(),
+                                "%s - %s",
+                                getString(getColumnIndexOrThrow("FirstText")),
+                                getString(getColumnIndexOrThrow("SecondText"))
+                            ),
                             false
                         )
 

@@ -30,7 +30,9 @@ class DBHelper constructor(private var context: Context) :
         const val userAvatarField = "avatar"
         const val messageIdField = "message_id"
 
+        const val chatIdField = "chat_id"
         const val textField = "text"
+        const val createdAtField = "created_at"
 
         const val topicIdField = "topic_id"
         const val topicTitleField = "topic_title"
