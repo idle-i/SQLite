@@ -1,0 +1,7 @@
+<resources>
+    <string name="appName">SQLite</string>
+    <string name="stringMessagesWithAttachments">Сообщения с вложениями</string>
+    <string name="stringUserWithTopics">Пользователи по интересам</string>
+    <string name="stringMessagesWithTimeInterval">Сообщения с временным интервалом</string>
+    <string name="stringUsersWithEmptyProfiles">Пользователи с пустым профилем</string>
+</resources>
